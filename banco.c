@@ -55,11 +55,47 @@ void novoCliente() {
 }
 
 void apagarCliente() {
-    // Implementação da função apagarCliente
+    char cpf[12];
+    printf("Digite o CPF do cliente que deseja apagar: ");
+    scanf("%s", cpf);
+
+    int encontrado = -1;
+    for (int i = 0; i < numClientes; i++) {
+        if (strcmp(clientes[i].cpf, cpf) == 0) {
+            encontrado = i;
+            break;
+        }
+    }
+
+    if (encontrado == -1) {
+        printf("Cliente não encontrado.\n");
+        return;
+    }
+
+    for (int i = encontrado; i < numClientes - 1; i++) {
+        clientes[i] = clientes[i + 1];
+    }
+
+    numClientes--;
+
+    printf("Cliente apagado com sucesso.\n");
 }
 
 void listarClientes() {
-    // Implementação da função listarClientes
+    if (numClientes == 0) {
+        printf("Nenhum cliente cadastrado.\n");
+        return;
+    }
+
+    printf("\n--- Lista de Clientes ---\n");
+    for (int i = 0; i < numClientes; i++) {
+        printf("Nome: %s\n", clientes[i].nome);
+        printf("CPF: %s\n", clientes[i].cpf);
+        printf("Tipo de Conta: %s\n", clientes[i].tipo_conta);
+        printf("Saldo: %.2f\n", clientes[i].saldo);
+        printf("Limite Negativo: %.2f\n", clientes[i].limite_negativo);
+        printf("------------------------\n");
+    }
 }
 
 void debito() {
