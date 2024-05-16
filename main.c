@@ -23,12 +23,10 @@ int main() {
                 novoCliente();
                 break;
             case 2:
-                // Chamar a função para apagar um cliente
-                // apagarCliente();
+                apagarCliente();
                 break;
             case 3:
-                // Chamar a função para listar todos os clientes
-                // listarClientes();
+                listarClientes();
                 break;
             case 4:
                 // Chamar a função para debitar um valor da conta do cliente
