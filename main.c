@@ -38,8 +38,7 @@ int main() {
                 extrato();
                 break;
             case 7:
-                // Chamar a função para realizar a transferência entre contas
-                // transferencia();
+                transferencia();
                 break;
             case 0:
                 printf("Encerrando o programa...\n");
