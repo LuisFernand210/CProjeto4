@@ -219,5 +219,66 @@ void extrato() {
 }
 
 void transferencia() {
-    // Implementação da função transferencia
+    char cpf_origem[12], senha_origem[20], cpf_destino[12];
+    float valor, taxa;
+
+    printf("Digite o CPF da conta de origem: ");
+    scanf("%s", cpf_origem);
+    printf("Digite a senha da conta de origem: ");
+    scanf("%s", senha_origem);
+    printf("Digite o CPF da conta de destino: ");
+    scanf("%s", cpf_destino);
+    printf("Digite o valor a ser transferido: ");
+    scanf("%f", &valor);
+
+    int origem = -1;
+    for (int i = 0; i < numClientes; i++) {
+        if (strcmp(clientes[i].cpf, cpf_origem) == 0) {
+            origem = i;
+            break;
+        }
+    }
+
+    if (origem == -1 || strcmp(clientes[origem].senha, senha_origem) != 0) {
+        printf("CPF ou senha da conta de origem incorretos.\n");
+        return;
+    }
+
+    int destino = -1;
+    for (int i = 0; i < numClientes; i++) {
+        if (strcmp(clientes[i].cpf, cpf_destino) == 0) {
+            destino = i;
+            break;
+        }
+    }
+
+    if (destino == -1) {
+        printf("CPF da conta de destino nao encontrado.\n");
+        return;
+    }
+
+    if (strcmp(clientes[origem].tipo_conta, "comum") == 0) {
+        taxa = 0.05;
+    } else if (strcmp(clientes[origem].tipo_conta, "plus") == 0) {
+        taxa = 0.03;
+    } else {
+        printf("Tipo de conta de origem invalido.\n");
+        return;
+    }
+
+    float totalDebito = valor + (valor * taxa);
+    if (clientes[origem].saldo - totalDebito < clientes[origem].limite_negativo) {
+        printf("Saldo insuficiente na conta de origem.\n");
+        return;
+    }
+
+    clientes[origem].saldo -= totalDebito;
+    clientes[origem].operacoes[clientes[origem].num_operacoes++] = -totalDebito;
+
+    clientes[destino].saldo += valor;
+    clientes[destino].operacoes[clientes[destino].num_operacoes++] = valor;
+
+    printf("Transferencia realizada com sucesso.\n");
+    printf("Saldo atual da conta de origem: %.2f\n", clientes[origem].saldo);
+    printf("Saldo atual da conta de destino: %.2f\n", clientes[destino].saldo);
 }
