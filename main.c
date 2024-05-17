@@ -32,8 +32,7 @@ int main() {
                 debito();
                 break;
             case 5:
-                // Chamar a função para depositar um valor na conta do cliente
-                // deposito();
+                deposito();
                 break;
             case 6:
                 // Chamar a função para gerar o extrato da conta do cliente
