@@ -29,8 +29,7 @@ int main() {
                 listarClientes();
                 break;
             case 4:
-                // Chamar a função para debitar um valor da conta do cliente
-                // debito();
+                debito();
                 break;
             case 5:
                 // Chamar a função para depositar um valor na conta do cliente
