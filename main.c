@@ -2,6 +2,8 @@
 #include "banco.h"
 
 int main() {
+    carregarDados();
+
     int opcao;
 
     while (1) {
