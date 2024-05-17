@@ -5,6 +5,7 @@
 
 #define MAX_CLIENTES 1000
 #define MAX_OPERACOES 100
+#define FILENAME "clientes.dat" 
 
 typedef struct {
     char nome[50];
@@ -21,9 +22,31 @@ Cliente clientes[MAX_CLIENTES];
 
 int numClientes = 0;
 
+void salvarDados() {
+    FILE *file = fopen(FILENAME, "wb");
+    if (file == NULL) {
+        printf("Erro ao abrir o arquivo para salvar os dados.\n");
+        return;
+    }
+    fwrite(&numClientes, sizeof(int), 1, file);
+    fwrite(clientes, sizeof(Cliente), numClientes, file);
+    fclose(file);
+}
+
+void carregarDados() {
+    FILE *file = fopen(FILENAME, "rb");
+    if (file == NULL) {
+        printf("Nenhum dado salvo encontrado.\n");
+        return;
+    }
+    fread(&numClientes, sizeof(int), 1, file);
+    fread(clientes, sizeof(Cliente), numClientes, file);
+    fclose(file);
+}
+
 void novoCliente() {
     if (numClientes >= MAX_CLIENTES) {
-        printf("Limite máximo de clientes atingido.\n");
+        printf("Limite maximo de clientes atingido.\n");
         return;
     }
 
@@ -43,13 +66,15 @@ void novoCliente() {
     } else if (strcmp(clientes[numClientes].tipo_conta, "plus") == 0) {
         clientes[numClientes].limite_negativo = -5000.0;
     } else {
-        printf("Tipo de conta inválido.\n");
+        printf("Tipo de conta invalido.\n");
         return;
     }
 
     clientes[numClientes].num_operacoes = 0;
 
     numClientes++;
+
+    salvarDados();
 
     printf("Cliente cadastrado com sucesso.\n");
 }
@@ -68,7 +93,7 @@ void apagarCliente() {
     }
 
     if (encontrado == -1) {
-        printf("Cliente não encontrado.\n");
+        printf("Cliente nao encontrado.\n");
         return;
     }
 
@@ -77,6 +102,8 @@ void apagarCliente() {
     }
 
     numClientes--;
+
+    salvarDados();
 
     printf("Cliente apagado com sucesso.\n");
 }
@@ -140,6 +167,8 @@ void debito() {
     clientes[encontrado].saldo -= totalDebito;
     clientes[encontrado].operacoes[clientes[encontrado].num_operacoes++] = -totalDebito;
 
+    salvarDados();
+
     printf("Debito realizado com sucesso. Saldo atual: %.2f\n", clientes[encontrado].saldo);
 }
 
@@ -167,6 +196,8 @@ void deposito() {
 
     clientes[encontrado].saldo += valor;
     clientes[encontrado].operacoes[clientes[encontrado].num_operacoes++] = valor;
+
+    salvarDados();
 
     printf("Deposito realizado com sucesso. Saldo atual: %.2f\n", clientes[encontrado].saldo);
 }
@@ -277,6 +308,8 @@ void transferencia() {
 
     clientes[destino].saldo += valor;
     clientes[destino].operacoes[clientes[destino].num_operacoes++] = valor;
+
+    salvarDados();
 
     printf("Transferencia realizada com sucesso.\n");
     printf("Saldo atual da conta de origem: %.2f\n", clientes[origem].saldo);
