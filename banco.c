@@ -3,8 +3,8 @@
 #include <string.h>
 #include "banco.h"
 
+#define MAX_CLIENTES 1000
 #define MAX_OPERACOES 100
-
 
 typedef struct {
     char nome[50];
@@ -172,7 +172,50 @@ void deposito() {
 }
 
 void extrato() {
-    // Implementação da função extrato
+    char cpf[12], senha[20];
+
+    printf("Digite o CPF do cliente: ");
+    scanf("%s", cpf);
+    printf("Digite a senha do cliente: ");
+    scanf("%s", senha);
+
+    int encontrado = -1;
+    for (int i = 0; i < numClientes; i++) {
+        if (strcmp(clientes[i].cpf, cpf) == 0) {
+            encontrado = i;
+            break;
+        }
+    }
+
+    if (encontrado == -1 || strcmp(clientes[encontrado].senha, senha) != 0) {
+        printf("CPF ou senha incorretos.\n");
+        return;
+    }
+
+    char filename[50];
+    sprintf(filename, "extrato_%s.txt", cpf);
+    FILE *file = fopen(filename, "w");
+
+    if (file == NULL) {
+        printf("Erro ao criar o arquivo de extrato.\n");
+        return;
+    }
+
+    fprintf(file, "Extrato da conta - %s\n", clientes[encontrado].nome);
+    fprintf(file, "CPF: %s\n", clientes[encontrado].cpf);
+    fprintf(file, "Tipo de Conta: %s\n", clientes[encontrado].tipo_conta);
+    fprintf(file, "Saldo Atual: %.2f\n", clientes[encontrado].saldo);
+    fprintf(file, "Limite Negativo: %.2f\n", clientes[encontrado].limite_negativo);
+    fprintf(file, "------------------------\n");
+    fprintf(file, "Histórico de Operações:\n");
+
+    for (int i = 0; i < clientes[encontrado].num_operacoes; i++) {
+        fprintf(file, "%.2f\n", clientes[encontrado].operacoes[i]);
+    }
+
+    fclose(file);
+
+    printf("Extrato gerado com sucesso. Arquivo: %s\n", filename);
 }
 
 void transferencia() {
