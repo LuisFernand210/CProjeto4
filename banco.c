@@ -144,7 +144,31 @@ void debito() {
 }
 
 void deposito() {
-    // Implementação da função deposito
+    char cpf[12];
+    float valor;
+
+    printf("Digite o CPF do cliente: ");
+    scanf("%s", cpf);
+    printf("Digite o valor a ser depositado: ");
+    scanf("%f", &valor);
+
+    int encontrado = -1;
+    for (int i = 0; i < numClientes; i++) {
+        if (strcmp(clientes[i].cpf, cpf) == 0) {
+            encontrado = i;
+            break;
+        }
+    }
+
+    if (encontrado == -1) {
+        printf("Cliente nao encontrado.\n");
+        return;
+    }
+
+    clientes[encontrado].saldo += valor;
+    clientes[encontrado].operacoes[clientes[encontrado].num_operacoes++] = valor;
+
+    printf("Deposito realizado com sucesso. Saldo atual: %.2f\n", clientes[encontrado].saldo);
 }
 
 void extrato() {
