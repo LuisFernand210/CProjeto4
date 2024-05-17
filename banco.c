@@ -99,7 +99,48 @@ void listarClientes() {
 }
 
 void debito() {
-    // Implementação da função debito
+    char cpf[12], senha[20];
+    float valor, taxa;
+
+    printf("Digite o CPF do cliente: ");
+    scanf("%s", cpf);
+    printf("Digite a senha do cliente: ");
+    scanf("%s", senha);
+    printf("Digite o valor a ser debitado: ");
+    scanf("%f", &valor);
+
+    int encontrado = -1;
+    for (int i = 0; i < numClientes; i++) {
+        if (strcmp(clientes[i].cpf, cpf) == 0) {
+            encontrado = i;
+            break;
+        }
+    }
+
+    if (encontrado == -1 || strcmp(clientes[encontrado].senha, senha) != 0) {
+        printf("CPF ou senha incorretos.\n");
+        return;
+    }
+
+    if (strcmp(clientes[encontrado].tipo_conta, "comum") == 0) {
+        taxa = 0.05;
+    } else if (strcmp(clientes[encontrado].tipo_conta, "plus") == 0) {
+        taxa = 0.03;
+    } else {
+        printf("Tipo de conta invalido.\n");
+        return;
+    }
+
+    float totalDebito = valor + (valor * taxa);
+    if (clientes[encontrado].saldo - totalDebito < clientes[encontrado].limite_negativo) {
+        printf("Saldo insuficiente.\n");
+        return;
+    }
+
+    clientes[encontrado].saldo -= totalDebito;
+    clientes[encontrado].operacoes[clientes[encontrado].num_operacoes++] = -totalDebito;
+
+    printf("Debito realizado com sucesso. Saldo atual: %.2f\n", clientes[encontrado].saldo);
 }
 
 void deposito() {
