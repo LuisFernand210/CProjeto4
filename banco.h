@@ -1,8 +1,6 @@
 #ifndef BANCO_H
 #define BANCO_H
 
-#define MAX_CLIENTES 1000
-
 extern int numClientes;
 
 void novoCliente();
